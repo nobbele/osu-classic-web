@@ -20,16 +20,14 @@ async function parseMultiPartFormBody(req: NextApiRequest) {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    /*if (req.method !== 'POST') {
+    console.log("Submit!");
+    if (req.method !== 'POST') {
         console.log("Non POST");
         res.status(400).send({ message: 'Only POST requests allowed' })
         return
-    }*/
-    //const data2 = await parseMultiPartFormBody(req) as any;
-    //console.log(data2);
+    }
+
     const key = "h89f2-890h2h89b34g-h80g134n90133";
-    //const iv = "KhBKrFwyksnroVmFrUFrEtV2v7NRQusu6ekNSmtnimE=";
-    //const msg = "bVu/nSEJaUj+FU/c3KyA875d4raP6nyJ5ZVyXQb04fcIXLLkTxgMevTplCKlQD3svrmpOJdrc5ZFkEn3qOtwDw9Z3v5UcH1uYUig/Rs2sHkjVrsAFKwsxw/wawoivl7g7IwPYfjl9or2b1DW6wVLADDoSmISMUp0DdGCDPOtImo6Ko+EcHF3GjumERzgIf2F3CmUusGJfQlYWTNmyhtPag=="
 
     const key_buf = Buffer.from(key, 'utf8');
 
@@ -38,16 +36,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const iv = data.fields.iv;
     const iv_buf = Buffer.from(iv, 'base64');
 
-    console.log(iv);
-
     const encrypted_data = {
         pl: data.fields.pl,
         score: data.fields.score,
         fs: data.fields.fs,
         s: data.fields.s
     }
+    const decrypted_data = {
+        pl: null,
+        score: null,
+        fs: null,
+        s: null,
+    };
 
-    const decrypted_data = Object.entries(encrypted_data as any).map(([name, data]) => {
+    Object.entries(encrypted_data as any).forEach(([name, data]) => {
         if (!data) {
             return null;
         }
@@ -58,8 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const re = /\p{Cc}*$/u;
         const dec_text = dec_buf.toString('utf8');
         const text = dec_text.replace(re, "");
-        console.log(text);
-        return [name, text];
+        (decrypted_data as any)[name] = text;
     });
     console.log(decrypted_data);
     res.send(4);

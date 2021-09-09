@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema<IUser>({
     accuracy: { type: Number, default: 1 },
     play_count: { type: Number, default: 0 },
     performance_points: { type: Number, default: 0 },
-}, { timestamps: true });
+});
 
 const User: mongoose.Model<IUser & Document> = mongoose.models.User || mongoose.model('User', userSchema);
 

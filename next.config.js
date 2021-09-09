@@ -7,6 +7,10 @@ module.exports = {
         destination: "/api/submit",
       },
       {
+        source: "/web/osu-osz2-getscores.php",
+        destination: "/api/get-scores",
+      },
+      {
         source: '/web/:path*',
         destination: '/api/:path*',
       },
