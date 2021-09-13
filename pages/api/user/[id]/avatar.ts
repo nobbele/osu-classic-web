@@ -10,7 +10,7 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
 
   await connectDb();
 
-  const user = await User.findOne({ user_id: id }, "profile_image");
+  const user = await User.findOne({ id: id }, "profile_image");
 
   let filePath;
   if (user?.profile_image) {

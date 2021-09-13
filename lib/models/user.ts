@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 export interface IUser {
     username: string,
-    user_id: number,
+    id: number,
     profile_image?: string,
 
     total_score: number,
@@ -14,7 +14,7 @@ export interface IUser {
 
 const userSchema = new mongoose.Schema<IUser>({
     username: { type: String, required: true },
-    user_id: { type: Number, required: true },
+    id: { type: Number, required: true },
     profile_image: String,
 
     total_score: { type: Number, default: 0 },

@@ -9,28 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "cryptian": "0.0.5",
-    "crypto-js": "^4.1.1",
     "formidable": "^1.2.2",
-    "js-rijndael": "^1.0.0",
     "mcrypt": "^0.1.17",
     "mongoose": "^6.0.4",
+    "mongoose-sequence": "^5.3.1",
     "next": "11.1.2",
-    "pkcs7-padding": "^0.1.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "rijndael-js": "^2.0.0"
+    "react-dom": "17.0.2"
   },
   "devDependencies": {
-    "@types/crypto-js": "^4.0.2",
     "@types/formidable": "^1.2.3",
     "@types/mcrypt": "^0.1.0",
     "@types/mongoose": "^5.11.97",
+    "@types/mongoose-sequence": "^3.0.6",
     "@types/next": "^9.0.0",
     "@types/node": "^16.7.10",
-    "@types/pkcs7-padding": "^0.1.0",
     "@types/react": "^17.0.20",
-    "@types/rijndael-js": "^1.0.0",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "typescript": "^4.4.2"

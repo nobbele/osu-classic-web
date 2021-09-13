@@ -1,17 +1,17 @@
 import mongoose from 'mongoose'
 
+// TODO gamemode
+
 export interface IBeatmap {
     id: number,
     checksum: string,
     filename: string,
-    scores: number[],
 }
 
 const beatmapSchema = new mongoose.Schema<IBeatmap>({
     id: { type: Number, required: true },
     checksum: { type: String, required: true },
     filename: { type: String, required: true },
-    scores: [{ type: Number, required: true }]
 });
 
 export interface IBeatmapSet {

@@ -1,4 +1,7 @@
 import mongoose from 'mongoose'
+const AutoIncrement = require('mongoose-sequence')(mongoose);
+
+// TODO gamemode
 
 export interface IScore {
     id: number,
@@ -16,7 +19,6 @@ export interface IScore {
 }
 
 const scoreSchema = new mongoose.Schema<IScore>({
-    id: { type: Number, required: true },
     beatmap_id: { type: Number, required: true },
     user_id: { type: Number, required: true },
     total_score: { type: Number, required: true },
@@ -29,6 +31,10 @@ const scoreSchema = new mongoose.Schema<IScore>({
     count_geki: { type: Number, required: true },
     played_at: { type: Date, required: true },
 });
+
+if (!mongoose.models.Score) {
+    scoreSchema.plugin(AutoIncrement, { inc_field: 'id' });
+}
 
 const Score: mongoose.Model<IScore & Document> = mongoose.models.Score || mongoose.model('Score', scoreSchema);
 

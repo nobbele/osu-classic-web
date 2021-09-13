@@ -6,7 +6,7 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
     const id = Number.parseInt(query.id.toString());
     await connectDb();
 
-    const user_doc = (await User.findOne({ user_id: id }));
+    const user_doc = (await User.findOne({ id: id }));
 
     const user = user_doc?.toJSON();
     delete user?._id;

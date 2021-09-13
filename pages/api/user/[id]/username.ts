@@ -6,7 +6,7 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
     const id = Number.parseInt(query.id.toString());
     await connectDb();
 
-    const user_doc = await User.findOne({ user_id: id }, { username: "$username" });
+    const user_doc = await User.findOne({ id: id }, { username: "$username" });
 
     if (!user_doc) {
         res.status(404);

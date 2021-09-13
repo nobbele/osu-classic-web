@@ -5,7 +5,7 @@ import connectDb from "lib/mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 
 async function scoreToString(score: IScore) {
-    const player = await User.findOne({ user_id: score.user_id });
+    const player = await User.findOne({ id: score.user_id });
     if (!player) {
         throw new Error("??");
     }
@@ -23,44 +23,48 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
 
     console.log(`Getting score for ${beatmapset_id} ${filename}`)
 
+    const hasOsz2 = false;
+
     const beatmapset = await BeatmapSet.findOne({ id: Number.parseInt(beatmapset_id as string) });
     if (!beatmapset) {
-        res.send("2|true");
+        res.send(`-1|${hasOsz2}`);
         return;
     }
     const beatmap = beatmapset.beatmaps.find(beatmap => beatmap.filename == filename);
     if (!beatmap) {
-        res.send("-1|true");
+        res.send(`-1|${hasOsz2}`);
         return;
     }
     if (beatmap.checksum != checksum) {
-        res.send("1|true");
+        res.send(`1|${hasOsz2}`);
         return;
     }
+
+    // TODO maybe don't send every single score?
+    const scores = await Score.find({
+        beatmap_id: beatmap.id,
+    }).sort({
+        total_score: -1
+    });
+
     let resText = "";
     // TODO add status
-    resText += `2|true|${beatmap.id}|${beatmapset.id}|${beatmap.scores.length}\n`;
+    resText += `2|${hasOsz2}|${beatmap.id}|${beatmapset.id}|${scores.length}\n`;
     // TODO online offset, display title(?), rating
     resText += "0\n";
     resText += "WhatIsThis\n";
     resText += "0.0\n";
 
-    const personal_score = await Score.findOne({
+    /*const personal_score = await Score.findOne({
         beatmap_id: beatmap.id,
         user_id: Number.parseInt(user_id as string)
-    });
+    });*/
+    const personal_score = scores.find(score => score.user_id == Number.parseInt(user_id as string));
     resText += personal_score ? await scoreToString(personal_score) : "";
 
-    // TODO maybe don't send every single score?
-    const scores = await Score.find({
-        id: {
-            $in: beatmap.scores
-        }
-    });
     for (const score of scores) {
         resText += "\n" + await scoreToString(score);
     }
 
-    console.log(resText);
     res.send(resText);
 }
