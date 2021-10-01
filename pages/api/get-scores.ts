@@ -18,24 +18,37 @@ async function scoreToString(score: IScore) {
 }
 
 export default async function handler({ query }: NextApiRequest, res: NextApiResponse) {
-    const { s: something, c: checksum, f: filename, u: user_id, m: gamemode, i: beatmapset_id, h: hashSomething, p: pSomething } = query;
+    let { s: showScore, c: checksum, f: filename, u: user_id, m: gamemode, i: beatmapset_id, h: osz2Hash, p: maybeRankType } = query;
     await connectDb();
 
     console.log(`Getting score for ${beatmapset_id} ${filename}`)
 
+    if (beatmapset_id == '-1') {
+        beatmapset_id = '118';
+    }
+
     const hasOsz2 = false;
 
-    const beatmapset = await BeatmapSet.findOne({ id: Number.parseInt(beatmapset_id as string) });
+    //const beatmapset = await BeatmapSet.findOne({ id: Number.parseInt(beatmapset_id as string) });
+    const beatmapset = await BeatmapSet.findOne({
+        id: Number.parseInt(beatmapset_id as string),
+        beatmaps: {
+            $elemMatch: {
+                filename: filename,
+            }
+        }
+    });
+
     if (!beatmapset) {
+        console.log("Beatmap doesn't exist");
         res.send(`-1|${hasOsz2}`);
         return;
     }
-    const beatmap = beatmapset.beatmaps.find(beatmap => beatmap.filename == filename);
-    if (!beatmap) {
-        res.send(`-1|${hasOsz2}`);
-        return;
-    }
+
+    const beatmap = beatmapset.beatmaps[0];
+
     if (beatmap.checksum != checksum) {
+        console.log("Checksum doesn't match");
         res.send(`1|${hasOsz2}`);
         return;
     }
@@ -43,6 +56,7 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
     // TODO maybe don't send every single score?
     const scores = await Score.find({
         beatmap_id: beatmap.id,
+        ranked: true,
     }).sort({
         total_score: -1
     });
@@ -55,10 +69,6 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
     resText += "WhatIsThis\n";
     resText += "0.0\n";
 
-    /*const personal_score = await Score.findOne({
-        beatmap_id: beatmap.id,
-        user_id: Number.parseInt(user_id as string)
-    });*/
     const personal_score = scores.find(score => score.user_id == Number.parseInt(user_id as string));
     resText += personal_score ? await scoreToString(personal_score) : "";
 
@@ -66,5 +76,6 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
         resText += "\n" + await scoreToString(score);
     }
 
+    console.log(`Sending ${scores.length} scores`);
     res.send(resText);
 }

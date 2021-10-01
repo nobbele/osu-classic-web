@@ -11,6 +11,14 @@ module.exports = {
         destination: "/api/get-scores",
       },
       {
+        source: "/web/osu-rate.php",
+        destination: "/api/rate"
+      },
+      {
+        source: "/web/osu-error.php",
+        destination: "/api/error",
+      },
+      {
         source: '/web/:path*',
         destination: '/api/:path*',
       },

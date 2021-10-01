@@ -8,7 +8,8 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
 
     const user_doc = (await User.findOne({ id: id }));
 
-    const user = user_doc?.toJSON();
+    const user: any = user_doc?.toJSON();
     delete user?._id;
+    delete user?.password;
     res.send(user);
 }

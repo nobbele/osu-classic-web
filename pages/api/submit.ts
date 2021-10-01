@@ -3,7 +3,9 @@ import formidable from 'formidable'
 import { MCrypt } from 'mcrypt';
 import Score from "lib/models/score";
 import BeatmapSet from "lib/models/beatmap";
-import User from "lib/models/user";
+import User, { getUserRank, recalculateStats } from "lib/models/user";
+import connectDb from "lib/mongodb";
+import SparkMD5 from "spark-md5";
 
 export const config = {
     api: {
@@ -107,7 +109,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         pl: data.fields.pl,
         score: data.fields.score,
         fs: data.fields.fs,
-        s: data.fields.s
+        s: data.fields.s,
     }
     const wip_decrypted_data = {
         pl: null,
@@ -129,10 +131,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         score: wip_decrypted_data.score as unknown as string,
         fs: wip_decrypted_data.score as unknown as string,
         s: wip_decrypted_data.score as unknown as string,
-        pass: data.pass as unknown as string,
+        pass: data.fields.pass as unknown as string,
     };
 
     const score = parseScoreString(decrypted_data.score);
+
+    console.log(`Received score from ${score.username}, ${score.max_combo}x ${score.total_score}`);
+
+    await connectDb();
 
     const beatmapset = await BeatmapSet.findOne({
         beatmaps: {
@@ -143,22 +149,57 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     if (!beatmapset) {
-        res.status(400).send("Unknown beatmap set");
+        console.log("Beatmap doesn't exist");
+        res.status(400).send("error:beatmap");
         return;
     }
 
     const beatmap = beatmapset.beatmaps[0];
-    if (!beatmap) {
-        res.status(400).send("Unknown beatmap");
+
+    const user = await User.findOne({ username: score.username });
+    if (!user) {
+        console.log("User doesn't exist");
+        res.status(400).send("error:nouser");
         return;
     }
 
-    // TODO verify password
-    const user = await User.findOne({ username: score.username });
-    if (!user) {
-        res.status(400).send("Unknown user");
+    // TODO
+    if (user.password != decrypted_data.pass) {
+        console.log("Invalid password");
+        res.status(400).send("error:pass");
         return;
     }
+
+    let isRanked = true;
+
+    if (!score.pass) {
+        isRanked = false;
+    }
+
+    const personalScore = await Score.findOne({ beatmap_id: beatmap.id, user_id: user.id });
+    if (personalScore != null) {
+        if (score.total_score < personalScore.total_score) {
+            console.log("User didn't beat personal score");
+            isRanked = false;
+        } else {
+            personalScore.ranked = false;
+            personalScore.save();
+        }
+
+    }
+
+    //TODO fixme
+    const beforeScores = await Score.find({
+        beatmap_id: beatmap.id,
+    }).sort({
+        total_score: -1
+    });
+    const beatmapRankBefore = beforeScores.findIndex(score => score.user_id == user.id) + 1;
+    const rankBefore = await getUserRank(user.id) || 0;
+    const userBefore = user.toObject();
+    //TODO end fixme
+
+    let respText = `approvedDate:|beatmapPasscount:2|beatmapPlaycount:150|beatmapId:${beatmap.id}\n`;
 
     const score_submit = new Score({
         beatmap_id: beatmap.id,
@@ -172,8 +213,46 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         count_katu: score.count_katu,
         count_geki: score.count_geki,
         played_at: score.played_at,
+        ranked: isRanked,
     });
-    score_submit.save();
+    const submitted_score = await score_submit.save();
 
-    res.status(200).send("OK");
+    respText += `chartId:overall|chartName:Global Leaderboard|chartEndDate:|onlineScoreId:${submitted_score.id}|`;
+
+    user.total_score += score.total_score;
+    user.save();
+    await recalculateStats(user.id);
+
+    // TODO maybe don't recalculate stats when score wasn't submitted?
+    //TODO fixme
+    const afterScores = await Score.find({
+        beatmap_id: beatmap.id,
+    }).sort({
+        total_score: -1
+    });
+    const beatmapRankAfter = afterScores.findIndex(score => score.user_id == user.id) + 1;
+
+    let toNextRank = 0;
+    let toNextRankUser = null;
+    if (beatmapRankAfter > 1) {
+        let nextScore = afterScores[beatmapRankAfter - 2];
+        toNextRank = nextScore.total_score - score.total_score;
+        toNextRankUser = (await User.findOne({ id: nextScore.user_id }))?.username;
+    }
+
+    const rankAfter = await getUserRank(user.id) || 0;
+    const userAfter = (await User.findOne({ id: user.id }))!;
+    //TODO end fixme
+
+    respText += `achievements:|`;
+    respText += `beatmapRankingBefore:${beatmapRankBefore}|beatmapRankingAfter:${beatmapRankAfter}|`;
+    respText += `rankBefore:${rankBefore}|rankAfter:${rankAfter}|`;
+    respText += `accuracyBefore:${userBefore.accuracy}|accuracyAfter:${userAfter.accuracy}|`;
+    respText += `rankedScoreBefore:${userBefore.ranked_score}|rankedScoreAfter:${userAfter.ranked_score}|`;
+    respText += `totalScoreBefore:${userBefore.total_score}|totalScoreAfter:${userAfter.total_score}|`;
+    respText += `toNextRank:${toNextRank}|toNextRankUser:${toNextRankUser || ""}`;
+
+    console.log(respText.split('\n').map(s => s.split('|')));
+
+    res.status(200).send(respText);
 }
