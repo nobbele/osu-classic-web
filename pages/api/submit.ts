@@ -5,7 +5,6 @@ import Score from "lib/models/score";
 import BeatmapSet from "lib/models/beatmap";
 import User, { getUserRank, recalculateStats } from "lib/models/user";
 import connectDb from "lib/mongodb";
-import SparkMD5 from "spark-md5";
 
 export const config = {
     api: {

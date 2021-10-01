@@ -1,9 +1,13 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import PageBase from "components/PageBase";
+import { useAuth } from "contexts/AuthContext";
 
-export default function Home() {
+export default function Index() {
   return (
+    <PageBase>
+      <p>Welcome to osu!classic. An osu! server for the 2012 client.</p>
+    </PageBase>
+  );
+  /*return (
     <div className={styles.container}>
       <Head>
         <title>Create Next App</title>
@@ -65,5 +69,5 @@ export default function Home() {
         </a>
       </footer>
     </div>
-  )
+  )*/
 }

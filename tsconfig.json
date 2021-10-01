@@ -18,7 +18,7 @@
         "skipLibCheck": false,
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
-        "baseUrl": "."
+        "baseUrl": "./"
     },
     "exclude": [
         "node_modules",
