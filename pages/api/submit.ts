@@ -163,7 +163,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    // TODO
     if (user.password != decrypted_data.pass) {
         console.log("Invalid password");
         res.status(400).send("error:pass");
