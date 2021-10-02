@@ -1,12 +1,7 @@
-import { useEffect } from "react";
+import { createPostfetcher } from "lib/fetcher";
 import { createContext, Dispatch, PropsWithChildren, ReducerAction, ReducerState, useContext, useReducer, useState } from "react";
 import { useCookies } from "react-cookie";
 import useSWR from "swr";
-
-const createPostfetcher = (params: any) => (url: any) => (global as any).fetch(url, {
-    method: "POST",
-    body: JSON.stringify(params),
-}).then((res: any) => res.json())
 
 interface IUserData {
     username: string,
@@ -49,8 +44,18 @@ export function AuthContextProvider({ children }: PropsWithChildren<{}>) {
     });
 
     const [{ token }, _setToken] = useCookies<string>(["token"]);
-    const { data: vertificationData, error: _verificationError } = useSWR(!state.isAuthenticated && token ? '/api/verify-token' : null, createPostfetcher({ token }));
-    const { data: userData, error: _userDataError } = useSWR(vertificationData && vertificationData.valid ? `/api/user/${vertificationData.user_id}/info` : null, createPostfetcher({ token }));
+    const { data: vertificationData, error: _verificationError } = useSWR(
+        !state.isAuthenticated && token && token != "null"
+            ? '/api/verify-token'
+            : null,
+        createPostfetcher({ token })
+    );
+    const { data: userData, error: _userDataError } = useSWR(
+        vertificationData && vertificationData.valid
+            ? `/api/user/${vertificationData.user_id}/info`
+            : null,
+        createPostfetcher({ token })
+    );
 
     if (userData) {
         dispatch({

@@ -1,15 +1,23 @@
 import { PropsWithChildren } from "react";
 import NavBar from "components/NavBar";
+import Head from "next/head";
 
 export interface PageBaseProps {
 
 }
 
 export default function PageBase({ children }: PropsWithChildren<PageBaseProps>) {
-    return (
-        <div className="">
+    return (<>
+        <Head>
+            <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className="flex flex-col h-full text-white">
             <NavBar />
-            <main>{children}</main>
+            <main className="bg-hero-image flex-grow p-4">
+                <div className="rounded bg-gray-500 h-full lg:mx-40 text-center p-4">
+                    {children}
+                </div>
+            </main>
         </div>
-    );
+    </>);
 }
