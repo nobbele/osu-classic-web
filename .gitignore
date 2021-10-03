@@ -33,6 +33,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-# Binaries
-public/release/*
+# Binaries (Include them anyway until I add the build step to patch the exe.)
+# ublic/release/*
 !public/release/hashes.json
