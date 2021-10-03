@@ -3,6 +3,7 @@ import { createPostfetcher } from "lib/fetcher";
 import { createRef } from "react";
 import { useCookies } from "react-cookie";
 import SparkMD5 from "spark-md5";
+import Link from "next/link";
 
 export interface NavLoginFormProps {
 
@@ -57,6 +58,10 @@ export default function NavLoginForm({ }: NavLoginFormProps) {
             <input className="text-black" type="password" placeholder="password" autoComplete="current-password" ref={passwordRef} />
         </div>
         <button className="mb-1 inline-block bg-red-500 hover:bg-red-700 py-1 px-3 rounded" onClick={() => onLogin()}>Login</button>
-        <a className="mt-1" href="/register">Go to register</a>
+        <Link href="/register">
+            <a className="mt-1">
+                Go to register
+            </a>
+        </Link>
     </>);
 }

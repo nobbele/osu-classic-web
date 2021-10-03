@@ -49,7 +49,9 @@ export default function NavBar({ }: NavBarProps) {
                 <NavButton href="/faq" title="FAQ" />
             </div>
             <div className="rounded flex items-center p-1 hover:bg-green-600 cursor-pointer" onClick={() => setShowProfileMenu(old => !old)} >
-                <span className="mr-3">{auth.userData?.username || ""}</span>
+                {auth.userData && (
+                    <span className="mr-3">{auth.userData.username || ""}</span>
+                )}
                 <Avatar userId={auth.userData?.user_id || 0} />
             </div>
         </nav>
