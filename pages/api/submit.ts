@@ -217,9 +217,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     respText += `chartId:overall|chartName:Global Leaderboard|chartEndDate:|onlineScoreId:${submitted_score.id}|`;
 
-    user.total_score += score.total_score;
-    user.save();
-    await recalculateStats(user.id);
+    if (score.pass) {
+        user.total_score += score.total_score;
+        user.save();
+        await recalculateStats(user.id);
+    }
 
     // TODO maybe don't recalculate stats when score wasn't submitted?
     //TODO fixme
