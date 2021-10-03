@@ -47,6 +47,7 @@ export default function NavBar({ }: NavBarProps) {
                 <NavBranding />
             </Link>
             <div className='inline-flex flex-row items-center'>
+                <NavButton href="/leaderboard" title="Leaderboard" />
                 <NavButton href="/faq" title="FAQ" />
             </div>
             <Avatar userId={auth.userData?.user_id || 0} onClick={() => setShowProfileMenu(old => !old)} />
