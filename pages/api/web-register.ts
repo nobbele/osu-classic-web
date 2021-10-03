@@ -1,8 +1,8 @@
 import User from "lib/models/user";
 import WebSession from "lib/models/webSession";
 import connectDb from "lib/mongodb";
-import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from "next";
+import crypto from 'crypto';
 
 export default async function handler({ method, body }: NextApiRequest, res: NextApiResponse) {
     if (method !== 'POST') {
@@ -13,24 +13,18 @@ export default async function handler({ method, body }: NextApiRequest, res: Nex
 
     const { username, password } = JSON.parse(body);
     await connectDb();
-    const user = await User.findOne({ username: username as string });
-    if (!user) {
-        console.log("Invalid username");
-        res.status(401).send("invalid username");
-        return;
-    }
-    if (!user.password) {
-        console.log("Unloginable user");
-        res.status(401).send("unloginable user");
+
+    if (await User.findOne({ username }) != null) {
+        console.log("User already exists");
+        res.status(400).send("user exists");
         return;
     }
 
-    const validPassword = user.password == password;
-    if (!validPassword) {
-        console.log("Invalid password");
-        res.status(401).send("invalid password");
-        return;
-    }
+    const newUser = new User({
+        username,
+        password,
+    });
+    const user = await newUser.save();
 
     const session = new WebSession({ user_id: user.id, token: crypto.randomBytes(64).toString('hex') });
     await session.save();

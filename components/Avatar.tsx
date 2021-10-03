@@ -10,8 +10,8 @@ export default function Avatar({ onClick, userId: _userId }: AvatarProps) {
         <div className='inline-flex flex-row items-center cursor-pointer' onClick={onClick}>
             <Image
                 className="rounded-full border border-gray-100 shadow-sm relative"
-                width="48"
-                height="48"
+                width="40"
+                height="40"
                 src="/default_avatar.png"
                 alt="User Profile Picture"
             />

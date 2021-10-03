@@ -30,8 +30,6 @@ export default function NavBar({ }: NavBarProps) {
 
     let profileMenu;
     if (auth.isAuthenticated) {
-        console.log("gaming");
-        console.log(auth.userData);
         profileMenu = <>
             <NavButton href={{ pathname: "/profile", query: { user_id: auth.userData!.user_id } }} title="Profile" alwaysWide={true} />
             <NavButton href="/settings" title="Settings" alwaysWide={true} />
@@ -50,7 +48,10 @@ export default function NavBar({ }: NavBarProps) {
                 <NavButton href="/leaderboard" title="Leaderboard" />
                 <NavButton href="/faq" title="FAQ" />
             </div>
-            <Avatar userId={auth.userData?.user_id || 0} onClick={() => setShowProfileMenu(old => !old)} />
+            <div className="rounded flex items-center p-1 hover:bg-green-600 cursor-pointer" onClick={() => setShowProfileMenu(old => !old)} >
+                <span className="mr-3">{auth.userData?.username || ""}</span>
+                <Avatar userId={auth.userData?.user_id || 0} />
+            </div>
         </nav>
         {showProfileMenu && <NavProfileMenu>{profileMenu}</NavProfileMenu>}
     </>);

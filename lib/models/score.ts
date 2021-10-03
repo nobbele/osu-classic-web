@@ -35,7 +35,10 @@ const scoreSchema = new mongoose.Schema<IScore>({
 });
 
 if (!mongoose.models.Score) {
-    scoreSchema.plugin(AutoIncrement, { inc_field: 'id' });
+    scoreSchema.plugin(AutoIncrement, {
+        id: 'score_id_seq',
+        inc_field: 'id'
+    });
 }
 
 const Score: mongoose.Model<IScore & Document> = mongoose.models.Score || mongoose.model('Score', scoreSchema);

@@ -23,18 +23,20 @@ export default function Profile() {
     );
 
     const username_text = infoData?.username || "Loading...";
-    const pp_text = infoData?.performance_points
+    const pp_text = infoData?.performance_points != null
         ? `${new Intl.NumberFormat('en').format(infoData.performance_points)}pp`
         : "Loading...";
-    const rank_text = rankData
+    const rank_text = rankData != null
         ? `#${rankData} (${pp_text})`
         : "Loading...";
-    const ranked_score_text = infoData?.ranked_score
+    const ranked_score_text = infoData?.ranked_score != null
         ? new Intl.NumberFormat('en').format(infoData.ranked_score)
         : "Loading...";
-    const total_score_text = infoData?.total_score
+    const total_score_text = infoData?.total_score != null
         ? new Intl.NumberFormat('en').format(infoData.total_score)
         : "Loading...";
+
+    console.log(infoData);
 
     return (
         <PageBase>

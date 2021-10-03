@@ -1,10 +1,11 @@
 import mongoose from 'mongoose'
 import Score from './score';
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 export interface IUser {
+    id: number,
     username: string,
     password: string,
-    id: number,
     profile_image?: string,
 
     total_score: number,
@@ -17,7 +18,6 @@ export interface IUser {
 const userSchema = new mongoose.Schema<IUser>({
     username: { type: String, required: true },
     password: { type: String, required: true },
-    id: { type: Number, required: true },
     profile_image: String,
 
     total_score: { type: Number, default: 0 },
@@ -26,6 +26,13 @@ const userSchema = new mongoose.Schema<IUser>({
     play_count: { type: Number, default: 0 },
     performance_points: { type: Number, default: 0 },
 });
+
+if (!mongoose.models.User) {
+    userSchema.plugin(AutoIncrement, {
+        id: 'user_id_seq',
+        inc_field: 'id'
+    });
+}
 
 const User: mongoose.Model<IUser & Document> = mongoose.models.User || mongoose.model('User', userSchema);
 

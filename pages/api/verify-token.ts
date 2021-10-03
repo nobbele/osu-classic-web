@@ -1,7 +1,5 @@
-import User from "lib/models/user";
 import WebSession from "lib/models/webSession";
 import connectDb from "lib/mongodb";
-import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler({ method, body }: NextApiRequest, res: NextApiResponse) {
@@ -11,17 +9,13 @@ export default async function handler({ method, body }: NextApiRequest, res: Nex
         return;
     }
 
-    const { token } = body;
+    const { token } = JSON.parse(body);
     await connectDb();
 
     const session = await WebSession.findOne({ token });
 
-    /*res.send({
+    res.send({
         valid: session != null,
         user_id: session && session.user_id,
-    });*/
-    res.send({
-        valid: true,
-        user_id: 1,
     });
 }

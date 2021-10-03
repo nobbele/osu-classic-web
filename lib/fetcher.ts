@@ -4,7 +4,12 @@ export function createPostfetcher(params: any) {
             method: "POST",
             body: JSON.stringify(params),
         });
-        return await res.json();
+        if (res.status == 200) {
+            return await res.json();
+        } else {
+            const text = await res.text();
+            throw new Error(text);
+        }
     };
 }
 
