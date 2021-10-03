@@ -1,7 +1,7 @@
 import PageBase from "components/PageBase";
 import Head from 'next/head';
 
-export default function Index() {
+export default function FAQ() {
   return (
     <PageBase>
       <Head>

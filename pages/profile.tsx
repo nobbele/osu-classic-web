@@ -5,7 +5,7 @@ import useSWR from "swr";
 import { createGetfetcher } from "lib/fetcher";
 import Avatar from "components/Avatar";
 
-export default function Index() {
+export default function Profile() {
     const router = useRouter();
     const { user_id: user_id_str } = router.query;
 
