@@ -29,8 +29,9 @@ export default function NavBar({ }: NavBarProps) {
     }
 
     let profileMenu;
-    console.log(auth);
     if (auth.isAuthenticated) {
+        console.log("gaming");
+        console.log(auth.userData);
         profileMenu = <>
             <NavButton href={{ pathname: "/profile", query: { user_id: auth.userData!.user_id } }} title="Profile" alwaysWide={true} />
             <NavButton href="/settings" title="Settings" alwaysWide={true} />

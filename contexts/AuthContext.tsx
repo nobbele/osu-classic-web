@@ -16,14 +16,20 @@ interface IAuthContext {
 
 const AuthContext = createContext<[ReducerState<typeof reducer>, Dispatch<ReducerAction<typeof reducer>>] | null>(null);
 
-function reducer(state: IAuthContext, action: any): IAuthContext {
+interface IAuthContextAction {
+    type: 'login' | 'logout',
+    userData?: IUserData,
+    token?: string,
+}
+
+function reducer(state: IAuthContext, action: IAuthContextAction): IAuthContext {
     switch (action.type) {
         case "login":
             console.log("login!");
             return {
                 isAuthenticated: true,
-                userData: action.userData,
-                token: action.token,
+                userData: action.userData!,
+                token: action.token!,
             };
         case "logout":
             console.log("logout!");
@@ -33,6 +39,7 @@ function reducer(state: IAuthContext, action: any): IAuthContext {
                 token: null,
             };
         default:
+            console.error("Unknown auth action");
             return state;
     }
 };

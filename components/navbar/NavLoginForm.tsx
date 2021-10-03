@@ -1,9 +1,8 @@
 import { useAuth } from "contexts/AuthContext";
 import { createPostfetcher } from "lib/fetcher";
-import { createRef, useEffect, useState } from "react";
+import { createRef } from "react";
 import { useCookies } from "react-cookie";
 import SparkMD5 from "spark-md5";
-import useSWR from "swr";
 
 export interface NavLoginFormProps {
 
@@ -32,7 +31,7 @@ export default function NavLoginForm({ }: NavLoginFormProps) {
 
         if (loginAttempt) {
             const res = await fetch(`/api/user/${loginAttempt.user_id}/username`);
-            const username = res.text();
+            const username = await res.text();
             setToken("token", loginAttempt.token, {
                 secure: true,
                 sameSite: "strict"
@@ -40,7 +39,8 @@ export default function NavLoginForm({ }: NavLoginFormProps) {
             dispatcher({
                 type: "login",
                 userData: {
-                    username
+                    username,
+                    user_id: loginAttempt.user_id,
                 },
                 token: loginAttempt.token
             });
