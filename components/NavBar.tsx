@@ -2,7 +2,7 @@ import Link from 'next/link';
 import NavButton from './navbar/NavButton';
 import { useState } from 'react';
 import NavProfileMenu from './navbar/NavProfileMenu';
-import NavAvatar from './navbar/NavAvatar';
+import Avatar from './Avatar';
 import NavBranding from './navbar/NavBranding';
 import { useAuth } from 'contexts/AuthContext';
 import NavLoginForm from './navbar/NavLoginForm';
@@ -32,7 +32,7 @@ export default function NavBar({ }: NavBarProps) {
     console.log(auth);
     if (auth.isAuthenticated) {
         profileMenu = <>
-            <NavButton href="/profile" title="Profile" alwaysWide={true} />
+            <NavButton href={{ pathname: "/profile", query: { user_id: auth.userData!.user_id } }} title="Profile" alwaysWide={true} />
             <NavButton href="/settings" title="Settings" alwaysWide={true} />
             <Button alwaysWide={true} onClick={() => logout()}>Logout</Button>
         </>;
@@ -48,7 +48,7 @@ export default function NavBar({ }: NavBarProps) {
             <div className='inline-flex flex-row items-center'>
                 <NavButton href="/faq" title="FAQ" />
             </div>
-            <NavAvatar onClick={() => setShowProfileMenu(old => !old)} />
+            <Avatar userId={auth.userData?.user_id || 0} onClick={() => setShowProfileMenu(old => !old)} />
         </nav>
         {showProfileMenu && <NavProfileMenu>{profileMenu}</NavProfileMenu>}
     </>);

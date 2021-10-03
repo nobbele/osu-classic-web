@@ -1,10 +1,11 @@
 import Image from "next/image";
 
-export interface NavAvatarProps {
-    onClick: () => void,
+export interface AvatarProps {
+    onClick?: () => void,
+    userId: number,
 }
 
-export default function NavAvatar({ onClick }: NavAvatarProps) {
+export default function Avatar({ onClick, userId: _userId }: AvatarProps) {
     return (
         <div className='inline-flex flex-row items-center cursor-pointer' onClick={onClick}>
             <Image

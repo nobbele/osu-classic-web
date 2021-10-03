@@ -5,6 +5,7 @@ import useSWR from "swr";
 
 interface IUserData {
     username: string,
+    user_id: number,
 }
 
 interface IAuthContext {
@@ -60,7 +61,10 @@ export function AuthContextProvider({ children }: PropsWithChildren<{}>) {
     if (userData) {
         dispatch({
             type: "login",
-            userData,
+            userData: {
+                ...userData,
+                user_id: userData.id,
+            },
             token: token,
         });
     }

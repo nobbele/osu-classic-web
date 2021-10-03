@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import Button from 'components/Button';
+import { UrlObject } from 'url';
 
 export interface NavButtonProps {
-    href: string,
+    href: string | UrlObject,
     title: string,
     alwaysWide?: boolean,
 }
