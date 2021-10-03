@@ -56,6 +56,7 @@ export default function NavLoginForm({ }: NavLoginFormProps) {
             <h3>Password:</h3>
             <input className="text-black" type="password" placeholder="password" autoComplete="current-password" ref={passwordRef} />
         </div>
-        <button className="bg-red-500 hover:bg-red-700 py-1 px-3 rounded" onClick={() => onLogin()}>Login</button>
+        <button className="mb-1 inline-block bg-red-500 hover:bg-red-700 py-1 px-3 rounded" onClick={() => onLogin()}>Login</button>
+        <a className="mt-1" href="/register">Go to register</a>
     </>);
 }
