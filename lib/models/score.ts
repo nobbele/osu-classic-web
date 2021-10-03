@@ -17,6 +17,7 @@ export interface IScore {
     count_geki: number,
     played_at: Date,
     ranked: boolean,
+    pass: boolean,
 }
 
 const scoreSchema = new mongoose.Schema<IScore>({
@@ -31,7 +32,8 @@ const scoreSchema = new mongoose.Schema<IScore>({
     count_katu: { type: Number, required: true },
     count_geki: { type: Number, required: true },
     played_at: { type: Date, required: true },
-    ranked: { type: Boolean, required: true }
+    ranked: { type: Boolean, required: true },
+    pass: { type: Boolean, default: true }
 });
 
 if (!mongoose.models.Score) {

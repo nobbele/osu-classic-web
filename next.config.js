@@ -30,6 +30,14 @@ module.exports = {
         source: "/release/update.php",
         destination: "/api/update"
       },
+      {
+        source: "/p/changelog",
+        destination: "/api/changelog"
+      },
+      {
+        source: "/release/update2.txt",
+        destination: "/api/update-data"
+      },
     ]
   },
 }

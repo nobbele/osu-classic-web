@@ -212,6 +212,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         count_geki: score.count_geki,
         played_at: score.played_at,
         ranked: isRanked,
+        pass: score.pass
     });
     const submitted_score = await score_submit.save();
 
