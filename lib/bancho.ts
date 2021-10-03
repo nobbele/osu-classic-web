@@ -5,7 +5,7 @@ module Bancho {
     let write_lock = false;
 
     async function connect() {
-        _socket = net.connect(13383, "127.0.0.1");
+        _socket = net.connect(13383, process.env.BANCHO_WEB_IP);
     }
 
     async function withSocketWriteLock<T>(f: (socket: net.Socket) => Promise<T>): Promise<T> {
