@@ -11,6 +11,18 @@ module.exports = {
         destination: "/api/get-scores",
       },
       {
+        source: "/web/osu-osz2-bmsubmit-getid.php",
+        destination: "/api/beatmap-submit/get-id"
+      },
+      {
+        source: "/web/osu-get-beatmap-topic.php",
+        destination: "/api/beatmap-submit/get-beatmap-topic"
+      },
+      {
+        source: "/web/osu-osz2-bmsubmit-upload.php",
+        destination: "/api/beatmap-submit/upload"
+      },
+      {
         source: "/web/osu-rate.php",
         destination: "/api/rate"
       },

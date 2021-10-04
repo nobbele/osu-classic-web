@@ -7,6 +7,7 @@ export interface IUser {
     username: string,
     password: string,
     profile_image?: string,
+    permissions: string[],
 
     total_score: number,
     ranked_score: number,
@@ -19,6 +20,7 @@ const userSchema = new mongoose.Schema<IUser>({
     username: { type: String, required: true },
     password: { type: String, required: true },
     profile_image: String,
+    permissions: [{ type: String, default: [] }],
 
     total_score: { type: Number, default: 0 },
     ranked_score: { type: Number, default: 0 },

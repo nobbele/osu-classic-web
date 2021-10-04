@@ -18,7 +18,7 @@ async function scoreToString(score: IScore) {
 }
 
 export default async function handler({ query }: NextApiRequest, res: NextApiResponse) {
-    let { s: showScore, c: checksum, f: filename, u: user_id, m: gamemode, i: beatmapset_id, h: osz2Hash, p: maybeRankType } = query;
+    let { s: _showScore, c: checksum, f: filename, u: user_id, m: _gamemode, i: beatmapset_id, h: _osz2Hash, p: _maybeRankType } = query;
     await connectDb();
 
     console.log(`Getting score for ${beatmapset_id} ${filename}`)
