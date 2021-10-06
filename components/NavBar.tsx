@@ -40,17 +40,19 @@ export default function NavBar({ }: NavBarProps) {
     }
 
     return (<>
-        <nav className='flex items-center w-full items-center justify-between bg-purple-600 p-3'>
-            <Link href='/' passHref={true}>
-                <NavBranding />
-            </Link>
-            <div className='inline-flex flex-row items-center'>
+        <nav className='flex w-full bg-purple-600 p-3'>
+            <div className="inline-flex flex-row flex-grow justify-start ">
+                <Link href='/' passHref={true}>
+                    <NavBranding />
+                </Link>
+            </div>
+            <div className='inline-flex flex-row flex-grow justify-center '>
                 <NavButton href="/leaderboard" title="Leaderboard" />
                 <NavButton href="/faq" title="FAQ" />
             </div>
-            <div className="rounded flex items-center p-1 hover:bg-green-600 cursor-pointer" onClick={() => setShowProfileMenu(old => !old)} >
+            <div className="rounded inline-flex flex-grow items-center justify-end p-1 hover:bg-green-600 cursor-pointer" onClick={() => setShowProfileMenu(old => !old)} >
                 {auth.userData && (
-                    <span className="mr-3">{auth.userData.username || ""}</span>
+                    <span className="align-middle mr-3">{auth.userData.username || ""}</span>
                 )}
                 <Avatar userId={auth.userData?.user_id || 0} />
             </div>

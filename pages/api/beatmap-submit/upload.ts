@@ -15,8 +15,11 @@ async function parseMultiPartFormBody(req: NextApiRequest) {
 }
 
 // TODO parse osz2
+// TODO Can't figure out how to parse osz2
 // /web/osu-osz2-bmsubmit-getid.php?u={ConfigManager.username}&h={ConfigManager.password}&s={maybeSetId}&b={beatmapIdListing}&z={beatmapHash}
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    res.status(404).send("How to parse osz2");
+    return;
     const { u: username, h: _password, t: _fullSubmit, z: _osz2Hash, s: _setId } = req.query;
     const data = await parseMultiPartFormBody(req) as any;
     const osz2File: File = data.files['0'];

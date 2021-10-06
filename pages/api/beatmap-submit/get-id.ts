@@ -6,6 +6,8 @@ import connectDb from "lib/mongodb";
 
 // /web/osu-osz2-bmsubmit-getid.php?u={ConfigManager.username}&h={ConfigManager.password}&s={maybeSetId}&b={beatmapIdListing}&z={beatmapHash}
 export default async function handler({ query }: NextApiRequest, res: NextApiResponse) {
+    res.send("-1\nBSS won't work until I figure out how to parse osz2 files. Please export package and upload the .osz file on the website.\n\n\n\n");
+    return;
     // TODO make const
     let { u: username, h: _password, s: setId, b: beatmapIds_str, z: hash } = query;
     const beatmapIds: string[] = (beatmapIds_str as string).split(",");
@@ -24,7 +26,7 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
 
     // New upload
     if (!setId || setId == "-1") {
-        const beatmapSetSubmission = new BeatmapSetSubmit({ creator_id: user.id });
+        const beatmapSetSubmission = new BeatmapSetSubmit({ creator_id: user!.id });
         beatmapIds.forEach(_beatmapId => {
             beatmapSetSubmission.beatmaps.push({} as any);
         });
