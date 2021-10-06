@@ -6,12 +6,22 @@ export interface IBeatmap {
     id: number,
     checksum: string,
     filename: string,
+    metadata: {
+        title: string,
+    },
 }
 
 const beatmapSchema = new mongoose.Schema<IBeatmap>({
     id: { type: Number, required: true },
     checksum: { type: String, required: true },
     filename: { type: String, required: true },
+    metadata: {
+        type: {
+            title: String,
+        }, default: {
+            title: "Unknown Title"
+        }
+    }
 });
 
 export interface IBeatmapSet {

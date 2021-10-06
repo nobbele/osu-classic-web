@@ -46,8 +46,9 @@ export default function NavBar({ }: NavBarProps) {
                     <NavBranding />
                 </Link>
             </div>
-            <div className='inline-flex flex-row flex-grow justify-center '>
+            <div className='inline-flex flex-row flex-grow justify-center items-center'>
                 <NavButton href="/leaderboard" title="Leaderboard" />
+                <NavButton href="/beatmaps" title="Beatmaps" />
                 <NavButton href="/faq" title="FAQ" />
             </div>
             <div className="rounded inline-flex flex-grow items-center justify-end p-1 hover:bg-green-600 cursor-pointer" onClick={() => setShowProfileMenu(old => !old)} >
