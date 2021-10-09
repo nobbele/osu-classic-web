@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@wasm-tool/wasm-pack-plugin": "^1.6.0",
     "cookie": "0.4.1",
+    "extract-zip": "^2.0.1",
     "formidable": "1.2.2",
     "mcrypt": "0.1.17",
     "mongoose": "6.0.8",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@types/cookie": "0.4.1",
+    "@types/extract-zip": "^2.0.1",
     "@types/formidable": "1.2.4",
     "@types/mcrypt": "0.1.0",
     "@types/mongoose": "5.11.97",

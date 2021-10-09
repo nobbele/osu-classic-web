@@ -1,0 +1,14 @@
+[package]
+name = "osu-parser-wasm"
+version = "0.1.0"
+edition = "2018"
+resolver = "2"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+osu-parser = { path = "../../../../osu-rs/osu-parser", features = ["serde"] }
+wasm-bindgen = { version = "0.2.78", features = ["serde-serialize"] }

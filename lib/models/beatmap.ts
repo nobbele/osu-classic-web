@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 // TODO gamemode
 
@@ -33,6 +34,20 @@ const beatmapSetSchema = new mongoose.Schema<IBeatmapSet>({
     id: { type: Number, required: true },
     beatmaps: [{ type: beatmapSchema, required: true }]
 });
+
+if (!mongoose.models.BeatmapSet) {
+    beatmapSetSchema.plugin(AutoIncrement, {
+        id: 'beatmap_set_id_seq',
+        inc_field: 'id',
+        disable_hooks: true
+    });
+
+    beatmapSchema.plugin(AutoIncrement, {
+        id: 'beatmap_id_seq',
+        inc_field: 'id',
+        disable_hooks: true
+    });
+}
 
 const BeatmapSet: mongoose.Model<IBeatmapSet & Document> = mongoose.models.BeatmapSet || mongoose.model('BeatmapSet', beatmapSetSchema);
 

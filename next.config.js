@@ -1,3 +1,5 @@
+const WasmPackPlugin = require('@wasm-tool/wasm-pack-plugin');
+const path = require('path');
 module.exports = {
   reactStrictMode: true,
   async rewrites() {
@@ -51,5 +53,22 @@ module.exports = {
         destination: "/api/update-data"
       },
     ]
+  },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.wasm$/,
+      type: 'webassembly/sync'
+    });
+    config.plugins = (config.plugins || []).concat([
+      new WasmPackPlugin({
+        crateDirectory: path.resolve(__dirname, "./rust/osu-parser-wasm"),
+        outDir: path.resolve(__dirname, "./pkg/osu-parser-wasm"),
+        args: '--log-level warn'
+      })
+    ]);
+    config.experiments = {
+      syncWebAssembly: true,
+    };
+    return config;
   },
 }

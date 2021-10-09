@@ -36,3 +36,5 @@ yarn-error.log*
 # Binaries (Include them anyway until I add the build step to patch the exe.)
 # ublic/release/*
 !public/release/hashes.json
+
+pkg/

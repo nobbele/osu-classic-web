@@ -12,7 +12,7 @@ export const config = {
     },
 }
 
-async function parseMultiPartFormBody(req: NextApiRequest) {
+async function parseMultiPartFormBody(req: NextApiRequest): Promise<{ err: any, fields: formidable.Fields, files: formidable.Files }> {
     return new Promise((resolve, reject) => {
         const form = formidable({ multiples: true });
 
