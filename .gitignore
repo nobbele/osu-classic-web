@@ -34,7 +34,9 @@ yarn-error.log*
 .vercel
 
 # Binaries (Include them anyway until I add the build step to patch the exe.)
-# ublic/release/*
+# public/release/*
 !public/release/hashes.json
 
 pkg/
+
+rust/**/target/

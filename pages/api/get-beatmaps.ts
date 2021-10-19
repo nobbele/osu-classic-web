@@ -10,6 +10,7 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
 
     res.send(beatmaps.map(beatmap_set => ({
         id: beatmap_set.id,
-        title: beatmap_set.beatmaps[0].metadata.title
+        title: beatmap_set.metadata.title,
+        status: beatmap_set.status,
     })));
 }

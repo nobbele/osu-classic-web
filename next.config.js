@@ -21,6 +21,10 @@ module.exports = {
         destination: "/api/beatmap-submit/get-beatmap-topic"
       },
       {
+        source: "/web/osu-osz2-bmsubmit-post.php",
+        destination: "/api/beatmap-submit/post"
+      },
+      {
         source: "/web/osu-osz2-bmsubmit-upload.php",
         destination: "/api/beatmap-submit/upload"
       },
@@ -63,6 +67,11 @@ module.exports = {
       new WasmPackPlugin({
         crateDirectory: path.resolve(__dirname, "./rust/osu-parser-wasm"),
         outDir: path.resolve(__dirname, "./pkg/osu-parser-wasm"),
+        args: '--log-level warn'
+      }),
+      new WasmPackPlugin({
+        crateDirectory: path.resolve(__dirname, "./rust/osz2-wasm"),
+        outDir: path.resolve(__dirname, "./pkg/osz2-wasm"),
         args: '--log-level warn'
       })
     ]);

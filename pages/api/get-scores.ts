@@ -23,10 +23,6 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
 
     console.log(`Getting score for ${beatmapset_id} ${filename}`)
 
-    if (beatmapset_id == '-1') {
-        beatmapset_id = '118';
-    }
-
     const hasOsz2 = false;
 
     //const beatmapset = await BeatmapSet.findOne({ id: Number.parseInt(beatmapset_id as string) });
@@ -36,7 +32,7 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
             $elemMatch: {
                 filename: filename,
             }
-        }
+        },
     });
 
     if (!beatmapset) {
@@ -47,11 +43,33 @@ export default async function handler({ query }: NextApiRequest, res: NextApiRes
 
     const beatmap = beatmapset.beatmaps[0];
 
+    // TODO fixme
     if (beatmap.checksum != checksum) {
-        console.log("Checksum doesn't match");
+        console.log(`Checksum doesn't match. Got '${checksum}', expected '${beatmap.checksum}'`);
         res.send(`1|${hasOsz2}`);
         return;
     }
+
+    console.log(beatmapset.status);
+
+    if (beatmapset.status == "pending" || beatmapset.status == "empty") {
+        console.log("Beatmap set is pending or empty");
+        res.send(`0|${hasOsz2}`);
+        return;
+    }
+
+    if (beatmapset.status != "ranked" && beatmapset.status != "approved") {
+        console.log("Beatmap set has an invalid status");
+        res.send(`1|${hasOsz2}`);
+        return;
+    }
+
+    let statusType = beatmapset.status == "ranked"
+        ? 2
+        : beatmapset.status == "approved"
+            ? 3
+            // Unreachable!
+            : -1;
 
     // TODO maybe don't send every single score?
     const scores = await Score.find({

@@ -10,22 +10,6 @@ export default function FAQ() {
         createGetfetcher()
     );
 
-    const oszRef = createRef<HTMLInputElement>();
-
-    async function onSubmit(e: FormEvent) {
-        e.preventDefault();
-
-        let oszInput = oszRef.current!;
-
-        const formData = new FormData();
-        formData.append("osz", oszInput.files![0], oszInput.value);
-
-        await fetch("/api/submit-beatmap", {
-            method: 'POST',
-            body: formData,
-        })
-    }
-
     return (
         <PageBase>
             <Head>
@@ -36,15 +20,12 @@ export default function FAQ() {
             {
                 beatmaps && beatmaps.map((beatmap: any) => (
                     <div key={beatmap.id}>
+                        <span>({beatmap.status})</span>
                         <span>{beatmap.title}</span>
                         <br />
                     </div>
                 ))
             }
-            <form onSubmit={onSubmit} className="mt-auto self-center text-black flex flex-col">
-                <input name="osz" type="file" ref={oszRef} />
-                <input type="submit"></input>
-            </form>
         </PageBase >
     );
 }

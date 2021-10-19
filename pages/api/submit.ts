@@ -99,6 +99,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
+
     const data = await parseMultiPartFormBody(req) as any;
 
     const iv = data.fields.iv;
@@ -144,7 +145,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             $elemMatch: {
                 checksum: score.file_checksum,
             }
-        }
+        },
+        status: "ranked"
     });
 
     if (!beatmapset) {
